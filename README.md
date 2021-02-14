@@ -29,8 +29,15 @@ int main()
     {
         getline(cin, exp);
 
-        formula_parser.parser(exp);
-        cout << formula_parser.calc() << '\n';
+        try
+        {
+            formula_parser.parser(exp);
+            cout << formula_parser.calc() << '\n';
+        }
+        catch(ExceptionFormulaParser &err)
+        {
+            cout << err.what() << '\n';
+        }
     }
 
     return 0;

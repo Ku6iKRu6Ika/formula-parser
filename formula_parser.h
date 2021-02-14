@@ -2,10 +2,12 @@
 #define FORMULA_PARSER_H
 
 #include <cmath>
+#include <iostream>
 #include <string>
+#include <cctype>
 using namespace std;
 
-#define VERSION_FORMULA_PARSER "1.0.0.0"
+#define VERSION_FORMULA_PARSER "1.1.0"
 
 class FormulaParser
 {
@@ -17,6 +19,18 @@ class FormulaParser
 public:
     void parser(string exp);
     double calc();
+};
+
+class ExceptionFormulaParser
+{
+    string m_error;
+public:
+    ExceptionFormulaParser(string error)
+        : m_error(error)
+    {
+    }
+ 
+    const char* what() { return m_error.c_str(); }
 };
 
 #endif

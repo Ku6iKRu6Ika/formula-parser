@@ -35,13 +35,23 @@ void FormulaParser::parser(string exp)
 {
     char stack[1000];
     int j = 0;
+    bool is_there_op = true, is_there_space = false;
 
     polish_exp.clear();
 
     for(int i = 0; i < exp.size(); ++i)
     {
         if(is_digit(exp[i]))
+        {
             polish_exp += exp[i];
+
+            if(is_there_op)
+                is_there_op = false;
+            else if(is_there_space == true)
+                throw ExceptionFormulaParser("Invalid syntax");
+
+            is_there_space = false;
+        }
         else if(exp[i] == '(' || exp[i] == ')')
         {
             if(exp[i] == '(')
@@ -60,6 +70,16 @@ void FormulaParser::parser(string exp)
         }
         else if(is_operator(exp[i]))
         {
+            is_there_space = false;
+
+            if(polish_exp != "")
+            {
+                if(is_there_op)
+                    throw ExceptionFormulaParser("Invalid syntax");
+                else
+                    is_there_op = true;
+            }
+
             if(j == 0 || get_priority(stack[j - 1]) < get_priority(exp[i]))
                 stack[j++] = exp[i];
             else if(get_priority(stack[j - 1]) >= get_priority(exp[i]))
@@ -77,6 +97,10 @@ void FormulaParser::parser(string exp)
 
             polish_exp += " ";
         }
+        else if(isspace(exp[i]))
+            is_there_space = true;
+        else
+            throw ExceptionFormulaParser("Unknown symbol");
     }
 
     if(j > 0)
@@ -139,6 +163,9 @@ double FormulaParser::calc()
                     result = stack[j];
                     break;
                 case '/':
+                    if(op2 == 0)
+                        throw ExceptionFormulaParser("Division by zero");
+
                     stack[j] = op1 / op2;
                     result = stack[j];
                     break;
