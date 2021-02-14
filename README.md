@@ -6,7 +6,7 @@
 ### Operations
 * `+` - addition
 * `-` - subtraction
-* `\` - multiplication
+* `*` - multiplication
 * `/` - division
 * `^` - degree
 ### API
