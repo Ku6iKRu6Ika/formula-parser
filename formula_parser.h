@@ -7,7 +7,7 @@
 #include <cctype>
 using namespace std;
 
-#define VERSION_FORMULA_PARSER "1.1.0"
+#define VERSION_FORMULA_PARSER "1.2.0"
 
 class FormulaParser
 {
