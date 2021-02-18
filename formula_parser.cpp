@@ -35,7 +35,7 @@ void FormulaParser::parser(string exp)
 {
     char stack[1000];
     int j = 0;
-    bool k = true, l = true, h = true;
+    bool there_is_operator = true, space_after_operator = true;
 
     polish_exp.clear();
 
@@ -43,12 +43,12 @@ void FormulaParser::parser(string exp)
     {
         if(is_digit(exp[i]))
         {
-            if(k)
+            if(there_is_operator)
                 polish_exp += exp[i];
             else
                 throw ExceptionFormulaParser("Invalid syntax");
 
-            l = true;
+            space_after_operator = true;
         }
         else if(exp[i] == '(' || exp[i] == ')')
         {
@@ -68,12 +68,8 @@ void FormulaParser::parser(string exp)
         }
         else if(is_operator(exp[i]))
         {
-            if(k && !l && !h)
-                throw ExceptionFormulaParser("Invalid syntax");
-
-            k = true;
-            l = false;
-            h = false;
+            there_is_operator = true;
+            space_after_operator = false;
 
             if(j == 0 || get_priority(stack[j - 1]) < get_priority(exp[i]))
                 stack[j++] = exp[i];
@@ -94,10 +90,8 @@ void FormulaParser::parser(string exp)
         }
         else if(isspace(exp[i]))
         {
-            if(l)
-                k = false;
-
-            h = true;
+            if(space_after_operator)
+                there_is_operator = false;
         }
         else
             throw ExceptionFormulaParser("Unknown symbol");
